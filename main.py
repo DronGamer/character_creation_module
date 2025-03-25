@@ -1,8 +1,6 @@
 from random import randint
 
-
-# Все базовые параметры в одном словаре
-GAME_CONSTANTS = {
+GAME_CONSTANTS: dict = {
     'base_stats': {
         'attack': 5,
         'defence': 10,
@@ -13,8 +11,8 @@ GAME_CONSTANTS = {
     'dmg_multiple': 2
 }
 
-# Описания классов
-CLASS_DESCRIPTIONS = {
+
+CLASS_DESCRIPTIONS: dict = {
     'warrior': ('Воитель — дерзкий воин ближнего боя. '
                 'Сильный, выносливый и отважный.'),
     'mage': ('Маг — находчивый воин дальнего боя. '
@@ -23,8 +21,8 @@ CLASS_DESCRIPTIONS = {
                'Черпает силы из природы, веры и духов.')
 }
 
-# Характеристики классов
-CHAR_CLASSES = {
+
+CHAR_CLASSES: dict = {
     'warrior': {
         'description': '{name}, ты Воитель — отличный боец ближнего боя.',
         'attack': (3, 9),
@@ -46,7 +44,7 @@ CHAR_CLASSES = {
 }
 
 # Тексты игры
-GAME_TEXTS = {
+GAME_TEXTS: dict = {
     'welcome': ('Приветствую тебя, искатель приключений!\n'
                 'Кто же ты, путник?'),
     'stats': ('Здравствуй, {name}!\n'
@@ -61,14 +59,14 @@ GAME_TEXTS = {
 }
 
 # Команды для тренировки
-COMMANDS = {
+COMMANDS: dict = {
     'attack': lambda name, cls: attack(name, cls),
     'defence': lambda name, cls: defence(name, cls),
     'special': lambda name, cls: special(name, cls)
 }
 
 
-def choice_char_class():
+def choice_char_class() -> str:
     approve_choice = None
     char_class = None
     while approve_choice != 'y':
@@ -82,47 +80,43 @@ def choice_char_class():
     return char_class
 
 
-def attack(char_name, char_class):
-    damage_range = CHAR_CLASSES[char_class]['attack']
-    damage = (GAME_CONSTANTS['base_stats']['attack'] +
-              randint(*damage_range))
+def attack(char_name: str, char_class: str) -> str:
+    damage_range: int = CHAR_CLASSES[char_class]['attack']
+    damage: int = (GAME_CONSTANTS['base_stats']['attack'] + randint(*damage_range))
     return f'{char_name} нанёс урон противнику равный {damage}'
 
 
-def defence(char_name, char_class):
-    block_range = CHAR_CLASSES[char_class]['defence']
-    block = (GAME_CONSTANTS['base_stats']['defence'] +
-             randint(*block_range))
+def defence(char_name: str, char_class: str) -> str:
+    block_range: int = CHAR_CLASSES[char_class]['defence']
+    block: int = (GAME_CONSTANTS['base_stats']['defence'] + randint(*block_range))
     return f'{char_name} блокировал {block} урона'
 
 
-def special(char_name, char_class):
+def special(char_name: str, char_class: str) -> str:
     special_name, base_stat_key = CHAR_CLASSES[char_class]['special']
-    base_value = GAME_CONSTANTS['base_stats'][base_stat_key]
-    rand_bonus = randint(GAME_CONSTANTS['bonus']['min'],
-                         GAME_CONSTANTS['bonus']['max'])
-    crit = randint(GAME_CONSTANTS['crit']['min'],
-                   GAME_CONSTANTS['crit']['max'])
-    bonus = crit * GAME_CONSTANTS['dmg_multiple']
-    special_value = base_value + rand_bonus + bonus
+    base_value: int = GAME_CONSTANTS['base_stats'][base_stat_key]
+    rand_bonus: int = randint(GAME_CONSTANTS['bonus']['min'], GAME_CONSTANTS['bonus']['max'])
+    crit: int = randint(GAME_CONSTANTS['crit']['min'], GAME_CONSTANTS['crit']['max'])
+    bonus: int = crit * GAME_CONSTANTS['dmg_multiple']
+    special_value: str = base_value + rand_bonus + bonus
     return f'{char_name} применил «{special_name} {special_value}»'
 
 
-def start_training(char_name, char_class):
+def start_training(char_name, char_class) -> str:
     print(CHAR_CLASSES[char_class]['description'].format(name=char_name))
     print(GAME_TEXTS['training'])
     while True:
-        cmd = input('Введи команду: ')
+        cmd: str = input('Введи команду: ')
         if cmd == 'skip':
-            break
+            None
         elif cmd in COMMANDS:
             print(COMMANDS[cmd](char_name, char_class))
         else:
             print('Неизвестная команда!')
-    return 'Тренировка окончена.'
+        return 'Тренировка окончена.'
 
 
-def main():
+def main() -> True:
     print(GAME_TEXTS['welcome'])
     char_name = input('...назови себя: ')
     stats = GAME_CONSTANTS['base_stats']
@@ -132,5 +126,4 @@ def main():
 
 
 if __name__ == '__main__':
-   main()
-   
+    main()
